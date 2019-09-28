@@ -1,0 +1,28 @@
+.loading-container{
+    display: flex;
+    height:100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-container > img{
+    margin-bottom: 4rem;
+
+    animation-duration: 1s;
+    animation-name: rotate;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+  
+    to {
+        transform: rotate(360deg);
+    }
+  }
+  

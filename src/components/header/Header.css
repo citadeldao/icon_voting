@@ -1,0 +1,17 @@
+div.header{
+    background: #0D0F19;
+    /* padding: 1rem 0rem; */
+    position: fixed;
+    top: 0px;
+    left:0px;
+    right:0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height:4rem;
+}
+
+div.header>h2{
+    margin: 0px;
+}
