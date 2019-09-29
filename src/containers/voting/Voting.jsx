@@ -5,7 +5,9 @@ import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
 import ReactSlider from 'react-slider';
+import Dropdown from '../../components/dropdown/Dropdown';
 import Axios from 'axios';
+import electron from 'electron';
 
 export class Voting extends Component {
     constructor(props) {
@@ -42,6 +44,10 @@ export class Voting extends Component {
             })
     }
 
+    addToFavorites(item) {
+
+    }
+
     render() {
         const self = this;
         return <div className="voting-container">
@@ -60,8 +66,14 @@ export class Voting extends Component {
                         {Object.keys(self.state.producers).length && <div>{
                             Object.keys(self.state.producers).map((key) =>
                                 <div title={key} key={key} className="producer-item">
+                                    <Dropdown items={[{
+                                        key: key,
+                                        name: 'Add to favorites',
+                                        action: this.addToFavorites
+                                    }]} />
                                     <div className="label">{self.state.producers[key]}</div>
                                     <ReactSlider
+                                        value={self.state.sliderValue[key]}
                                         className="horizontal-slider"
                                         renderThumb={(props, state) => {
                                             let currentSliderValue = self.state.sliderValue;

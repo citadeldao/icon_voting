@@ -14,6 +14,21 @@ code {
     monospace;
 }
 
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background: #FBC02D; 
+}
+
+
 @font-face {
   font-family: "SFProDisplay-Regular";
   src: url("/SFProDisplay-Regular.ttf");
