@@ -1,9 +1,20 @@
 {
-  "name": "citadel_icx_staker",
+  "name": "icon_voting",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "",
+  "author": "paradigm",
+  "build": {
+    "appId": "com.paradigm.icon_voting",
+    "category": "Utility"
+  },
+  "license": "ISC",
+  "main": "./public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "axios": "^0.19.0",
+    "cross-env": "^6.0.0",
+    "electron-is-dev": "^1.1.0",
     "icon-sdk-js": "0.0.16",
     "node-sass": "^4.12.0",
     "react": "^16.10.1",
@@ -14,13 +25,16 @@
     "react-tabs": "^3.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron": "electron ."
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-build": "electron-builder",
+    "release": "yarn react-build && electron-builder --publish=always",
+    "build": "yarn react-build && yarn electron-build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
-  "main": "./src/electron.js",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -37,6 +51,9 @@
     ]
   },
   "devDependencies": {
-    "electron": "^6.0.10"
+    "concurrently": "^4.1.2",
+    "electron": "^6.0.10",
+    "electron-builder": "^21.2.0",
+    "wait-on": "^3.3.0"
   }
 }

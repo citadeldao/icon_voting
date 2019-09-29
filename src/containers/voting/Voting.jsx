@@ -7,7 +7,7 @@ import { Loading } from '../loading/Loading';
 import ReactSlider from 'react-slider';
 import Dropdown from '../../components/dropdown/Dropdown';
 import Axios from 'axios';
-import electron from 'electron';
+const electron = window.require('electron');
 
 export class Voting extends Component {
     constructor(props) {
@@ -17,7 +17,6 @@ export class Voting extends Component {
             producers: {},
             sliderValue: {}
         };
-
         this.updateProducers(props.apiUrl);
     }
 
@@ -32,7 +31,6 @@ export class Voting extends Component {
                 const data = resp.data;
                 let producers = this.state.producers;
                 data.producers.forEach(producer => producers[producer.account] = producer.alias || producer.account);
-                console.log(producers);
                 this.setState({ producers: producers, loading: true }, () => {
                     if (page * data.size < data.total) {
                         this.updateProducers(apiUrl, page + 1);
@@ -77,7 +75,7 @@ export class Voting extends Component {
                                         className="horizontal-slider"
                                         renderThumb={(props, state) => {
                                             let currentSliderValue = self.state.sliderValue;
-                                            if (currentSliderValue[key] != state.valueNow) {
+                                            if (currentSliderValue[key] !== state.valueNow) {
                                                 currentSliderValue[key] = state.valueNow;
                                                 self.setState({ sliderValue: currentSliderValue });
                                             }
