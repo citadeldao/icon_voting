@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
+import 'react-notifications/lib/notifications.css';
 import { Header } from './components/header/Header';
 import { Loading } from './containers/loading/Loading';
 import { Login } from './containers/login/Login';
+import { NotificationContainer } from 'react-notifications';
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +27,7 @@ class App extends Component {
         <div className="app-content">
           {this.state.screen === 'loading' ? <Loading /> : <Login />}
         </div>
-
+        <NotificationContainer />
       </div>
     );
   }

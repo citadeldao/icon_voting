@@ -1,4 +1,29 @@
 .app-content{
   margin-top: 4rem;
   height: calc(100vh - 4rem);
+  font-size: 14px;
+}
+
+.footer{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  left: 0px;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.logo-container > p {
+  color: #757575;
+}
+
+.notification-container {
+  bottom: 0;
+  top: unset !important;
 }

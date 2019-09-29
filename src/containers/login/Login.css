@@ -1,9 +1,0 @@
-.login-container{
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-}
-
-.login-container > *{
-    margin-bottom: 1rem;
-}
