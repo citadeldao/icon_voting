@@ -3,8 +3,19 @@ import React, { Component } from 'react';
 import { IconWallet } from 'icon-sdk-js';
 import logo from "../../logo.svg";
 import { NotificationManager } from 'react-notifications';
+import { Loading } from '../loading/Loading';
 
 export class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            keystore: localStorage.getItem('keystore'),
+            password: localStorage.getItem('password'),
+            wallet: localStorage.getItem('wallet'),
+            loading: false
+        }
+    }
+
     render() {
         let self = this;
         return <div className="login-container">
@@ -24,29 +35,43 @@ export class Login extends Component {
                         break;
                     }
                 }} />
-                <input placeholder="ICX password" onChange={(e) => { self.setState({ password: e.target.value }) }} />
+                <input type="password" placeholder="ICX password" onChange={(e) => { self.setState({ password: e.target.value }) }} />
                 <button onClick={() => {
-                    console.log(self.state);
-                    try {
-                        if (self.state && self.state.keystore) {
-                            let wallet = IconWallet.loadKeystore(self.state.keystore, self.state.password);
-                            NotificationManager.success(wallet.getAddress());
 
-                        }
-                        else {
-                            // alert('Loading failed(no keystore specified)');
-                            NotificationManager.warning('Loading failed(no keystore specified)');
+                    Promise.resolve()
+                        .then(() => new Promise(resolve => self.setState({ loading: true }, resolve)))
+                        .then(() => {
+                            if (self.state && self.state.keystore) {
+                                let wallet = IconWallet.loadKeystore(self.state.keystore, self.state.password);
+                                self.setState({ wallet: wallet });
+                                return true;
+                            }
+                            else {
+                                NotificationManager.warning('Failed(no keystore specified)');
+                                return false;
+                            }
+                        })
+                        .catch(err => {
+                            let errText = typeof (err) == 'string' ? err.split(/\[(.*)\]/).pop() : err;
+                            NotificationManager.warning(errText);
+                            return false;
+                        })
+                        .then(success => {
+                            self.setState({ loading: false });
 
-                        }
-                    }
-                    catch (err) {
-                        let errText = typeof (err) == 'string' && err.split(/\[(.*)\]/).pop() || err;
-                        // console.log(err);
-                        // alert(`ERROR: ${errText}`);
-                        NotificationManager.warning(errText);
-                    }
+                            if (success) {
+                                localStorage.setItem('keystore', self.state.keystore);
+                                localStorage.setItem('password', self.state.password);
+                                NotificationManager.success(self.state.wallet.getAddress());
+                                if (self.props.onLoginSuccess) {
+                                    self.props.onLoginSuccess();
+                                }
+                            }
+                        })
                 }}>Start</button>
             </div>
+
+            {self.state.loading && <Loading />}
 
             <div className="footer">
                 <div className="logo-container">

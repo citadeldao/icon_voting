@@ -5,6 +5,9 @@ import { Header } from './components/header/Header';
 import { Loading } from './containers/loading/Loading';
 import { Login } from './containers/login/Login';
 import { NotificationContainer } from 'react-notifications';
+import { Voting } from './containers/voting/Voting';
+
+const IOSTABC_API_URL = 'https://www.iostabc.com/api/producers?sort_by=votes&order=desc';
 
 class App extends Component {
   constructor(props) {
@@ -12,12 +15,11 @@ class App extends Component {
     this.state = {
       screen: 'loading'
     };
-  }
 
-  componentDidMount() {
     setTimeout(() => {
       this.setState({ screen: 'login' });
     }, 2000);
+
   }
 
   render() {
@@ -25,7 +27,11 @@ class App extends Component {
       <div className="App" >
         <Header />
         <div className="app-content">
-          {this.state.screen === 'loading' ? <Loading /> : <Login />}
+          {({
+            'loading': <Loading />,
+            'login': <Login onLoginSuccess={() => this.setState({ screen: 'voting' })} />,
+            'voting': <Voting apiUrl={IOSTABC_API_URL} />
+          })[this.state.screen]}
         </div>
         <NotificationContainer />
       </div>

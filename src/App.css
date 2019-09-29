@@ -23,7 +23,15 @@
   color: #757575;
 }
 
-.notification-container {
+.App .notification-container {
   bottom: 0;
   top: unset !important;
+  width: 100%;
+  padding: 0px;
+}
+
+.App .notification-success .message{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
