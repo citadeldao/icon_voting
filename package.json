@@ -6,11 +6,15 @@
   "author": "paradigm",
   "build": {
     "appId": "com.paradigm.icon_voting",
-    "category": "Utility"
+    "linux": {
+      "category": "Utility"
+    },
+    "mac": {
+      "category": "Utility"
+    }
   },
   "license": "ISC",
-  "main": "./public/electron.js",
-  "homepage": "./",
+  "main": "./electron.js",
   "dependencies": {
     "axios": "^0.19.0",
     "cross-env": "^6.0.0",
@@ -32,7 +36,7 @@
     "electron": "electron .",
     "electron-build": "electron-builder",
     "release": "yarn react-build && electron-builder --publish=always",
-    "build": "yarn react-build && yarn electron-build",
+    "build": "yarn react-build && yarn electron-build --linux",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {

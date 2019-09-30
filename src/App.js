@@ -7,8 +7,6 @@ import { Login } from './containers/login/Login';
 import { NotificationContainer } from 'react-notifications';
 import { Voting } from './containers/voting/Voting';
 
-const IOSTABC_API_URL = 'https://www.iostabc.com/api/producers?sort_by=votes&order=desc';
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +28,7 @@ class App extends Component {
           {({
             'loading': <Loading />,
             'login': <Login onLoginSuccess={() => this.setState({ screen: 'voting' })} />,
-            'voting': <Voting apiUrl={IOSTABC_API_URL} />
+            'voting': <Voting />
           })[this.state.screen]}
         </div>
         <NotificationContainer />
