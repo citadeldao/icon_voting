@@ -38,12 +38,6 @@ export class Login extends Component {
                     }
                 });
             });
-            ipcRenderer.on('/error', err => {
-                let errText = typeof (err) == 'string'
-                    ? err.split(/\[(.*)\]/).pop()
-                    : err ? err.message : err;
-                NotificationManager.warning(errText);
-            });
         }
         else {
             NotificationManager.warning('Failed(no keystore specified)');

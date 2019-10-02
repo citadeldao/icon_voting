@@ -14,7 +14,7 @@ export class Voting extends Component {
         this.state = {
             loading: true,
             producers: {},
-            sliderValue: {}
+            stakes: {}
         };
     }
 
@@ -26,7 +26,20 @@ export class Voting extends Component {
                 producers: Object.assign(producers, data.producers),
                 loading: Object.keys(producers).length < data.total
             })
+        });
+
+        electron.ipcRenderer.send('/stake');
+        electron.ipcRenderer.on('/stake', (event, stakes) => {
+            this.setState({ stakes: stakes });
         })
+    }
+
+    addToFavorites() {
+
+    }
+
+    setStake(address, value) {
+        electron.ipcRenderer.send('/stake', { address: address, value: value });
     }
 
     render() {
@@ -34,7 +47,7 @@ export class Voting extends Component {
         return <div className="voting-container">
             <h2>Manage your votes</h2>
             <div className="votes-controls">
-                <Tabs>
+                <Tabs defaultIndex={1}>
                     <TabList>
                         <Tab>Favorite</Tab>
                         <Tab>All</Tab>
@@ -55,18 +68,19 @@ export class Voting extends Component {
                                         }]} />
                                         <div className="label">{self.state.producers[key]}</div>
                                         <ReactSlider
-                                            value={self.state.sliderValue[key]}
+                                            value={self.state.stakes[key]}
+                                            onChange={this.setStake.bind(this, key)}
                                             className="horizontal-slider"
                                             renderThumb={(props, state) => {
-                                                let currentSliderValue = self.state.sliderValue;
-                                                if (currentSliderValue[key] !== state.valueNow) {
-                                                    currentSliderValue[key] = state.valueNow;
-                                                    self.setState({ sliderValue: currentSliderValue });
+                                                let currentStakeValue = self.state.stakes;
+                                                if (currentStakeValue[key] !== state.valueNow) {
+                                                    currentStakeValue[key] = state.valueNow;
+                                                    self.setState({ stakeValue: currentStakeValue });
                                                 }
                                                 return <div {...props}></div>
                                             }}
                                         />
-                                        <div className="percent-label">{`${(self.state.sliderValue[key] || 0)}%`}</div>
+                                        <div className="percent-label">{`${(self.state.stakes[key] || 0)}%`}</div>
                                     </div>
                                 )}
                             </div>

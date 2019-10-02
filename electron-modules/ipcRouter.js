@@ -60,7 +60,7 @@ function init() {
             }
         }
         catch (err) {
-            console.log(err);
+            console.error(err);
             event.sender.send('/error', err);
         }
     });
@@ -75,69 +75,67 @@ function init() {
         }
     });
     electron.ipcMain.on('/stake', async (event, stake) => {
-        if (stake) {
-            let { address, value } = stake;
-            if (typeof (address) !== 'string') {
-                return event.sender.send('/error', new ValidationError('Address should be of type string'));
-            }
-            if (typeof (value) !== 'number' && value >= 0 && value <= 100) {
-                return event.sender.send('/error', new ValidationError('Value should be number 0-100(%)'));
-            }
-            if (value) {
-                return db.update({
-                    model: 'Stake',
-                    address: address,
-                    value: value
-                }, {
-                    model: 'Stake',
-                    address: address
-                }, { upsert: true }, (err) => {
-                    if (err) {
-                        return event.sender.send('/error', err);
-                    }
-                    else {
-                        return event.sender.send('/stake', [{ address: address, value: value }]);
-                    }
-                });
-            }
-            else {
-                return db.remove({
-                    model: 'Stake',
-                    address: address
-                });
-            }
-        }
-        else {
-            return db.find({ model: 'Stake' }, (err, stakes) => {
-                if (err) {
-                    return event.sender.send('/error', err);
+        try {
+            if (stake) {
+                let { address, value } = stake;
+
+                if (typeof (address) !== 'string') {
+                    return event.sender.send('/error', new ValidationError('Address should be of type string'));
+                }
+                if (typeof (value) !== 'number' && value >= 0 && value <= 100) {
+                    return event.sender.send('/error', new ValidationError('Value should be number 0-100(%)'));
+                }
+                if (value) {
+                    await db.updateAsync({
+                        model: 'Stake',
+                        address: address
+                    }, {
+                        model: 'Stake',
+                        address: address,
+                        value: value
+                    }, { upsert: true });
+                    return event.sender.send('/stake', [{ address: address, value: value }]);
                 }
                 else {
-                    return event.sender.send('/stake', stakes);
+                    await db.removeAsync({ model: 'Stake', address: address });
+                    return event.sender.send('/stake', [{ address: address, value: 0 }]);
                 }
-            })
+            }
+            else {
+                let stakes = await db.findAsync({ model: 'Stake' });
+                return event.sender.send('/stake', stakes.reduce((prev, next) => {
+                    prev[next.address] = next.value;
+                    return prev;
+                }, {}));
+            }
         }
-
+        catch (err) {
+            event.sender.send('/error', err);
+        }
     });
     electron.ipcMain.on('/favorites', async (event, account) => {
-        //TODO:Implement
-        if (account) {
-            await db.updateAsync({
-                model: 'Favorite',
-                address: account.address,
-                alias: account.alias
-            }, {
-                model: 'Favorite',
-                address: account.address
-            }, { upsert: true });
-        }
+        try {
+            if (account) {
+                await db.updateAsync({
+                    model: 'Favorite',
+                    address: account.address
+                }, {
+                    model: 'Favorite',
+                    address: account.address,
+                    alias: account.alias
+                }, { upsert: true });
+            }
 
-        event.sender.send('/favorites', (await db.findAsync({
-            model: 'Favorite'
-        })).reduce((prev, next) => {
-            prev[next.address] = next.alias;
-            return prev;
-        }, {}));
+            event.sender.send('/favorites', (await db.findAsync({
+                model: 'Favorite'
+            })).reduce((prev, next) => {
+                prev[next.address] = next.alias;
+                return prev;
+            }, {}));
+        }
+        catch (err) {
+            event.sender.send('/error', err);
+        }
     });
 }
 

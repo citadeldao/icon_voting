@@ -4,8 +4,9 @@ import 'react-notifications/lib/notifications.css';
 import { Header } from './components/header/Header';
 import { Loading } from './containers/loading/Loading';
 import { Login } from './containers/login/Login';
-import { NotificationContainer } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Voting } from './containers/voting/Voting';
+const { ipcRenderer } = window.require('electron');
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,16 @@ class App extends Component {
       this.setState({ screen: 'login' });
     }, 2000);
 
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('/error', err => {
+      console.error(err);
+      let errText = typeof (err) == 'string'
+        ? err.split(/\[(.*)\]/).pop()
+        : err ? err.message : err;
+      NotificationManager.warning(errText);
+    });
   }
 
   render() {
