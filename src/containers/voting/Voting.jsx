@@ -24,7 +24,7 @@ export class Voting extends Component {
             let producers = this.state.producers;
             this.setState({
                 producers: Object.assign(producers, data.producers),
-                loading: data.size < data.total
+                loading: Object.keys(producers).length < data.total
             })
         })
     }
