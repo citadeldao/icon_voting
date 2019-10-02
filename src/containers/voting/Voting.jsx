@@ -4,8 +4,7 @@ import 'react-tabs/style/react-tabs.css';
 import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
-import ReactSlider from 'react-slider';
-import Dropdown from '../../components/dropdown/Dropdown';
+import { ProducersList } from './components/ProducersList';
 const electron = window.require('electron');
 
 export class Voting extends Component {
@@ -14,6 +13,7 @@ export class Voting extends Component {
         this.state = {
             loading: true,
             producers: {},
+            favorites: {},
             stakes: {}
         };
     }
@@ -31,11 +31,21 @@ export class Voting extends Component {
         electron.ipcRenderer.send('/stake');
         electron.ipcRenderer.on('/stake', (event, stakes) => {
             this.setState({ stakes: stakes });
+        });
+
+        electron.ipcRenderer.send('/favorites');
+        electron.ipcRenderer.on('/favorites', (event, favorites) => {
+            console.log(favorites)
+            this.setState({ favorites: favorites });
         })
     }
 
-    addToFavorites() {
-
+    setFavorite(address, add) {
+        electron.ipcRenderer.send('/favorites', {
+            address: address,
+            alias: this.state.producers[address],
+            add: add
+        });
     }
 
     setStake(address, value) {
@@ -54,40 +64,24 @@ export class Voting extends Component {
                     </TabList>
 
                     <TabPanel>
-
+                        <ProducersList
+                            favorites={self.state.favorites}
+                            producers={self.state.favorites}
+                            stakes={self.state.stakes}
+                            onSetStake={self.setStake.bind(self)}
+                            onSetFavorite={self.setFavorite.bind(self)}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        {Object.keys(self.state.producers).length
-                            ? <div>{
-                                Object.keys(self.state.producers).map((key) =>
-                                    <div title={key} key={key} className="producer-item">
-                                        <Dropdown items={[{
-                                            key: key,
-                                            name: 'Add to favorites',
-                                            action: this.addToFavorites
-                                        }]} />
-                                        <div className="label">{self.state.producers[key]}</div>
-                                        <ReactSlider
-                                            value={self.state.stakes[key]}
-                                            onChange={this.setStake.bind(this, key)}
-                                            className="horizontal-slider"
-                                            renderThumb={(props, state) => {
-                                                let currentStakeValue = self.state.stakes;
-                                                if (currentStakeValue[key] !== state.valueNow) {
-                                                    currentStakeValue[key] = state.valueNow;
-                                                    self.setState({ stakeValue: currentStakeValue });
-                                                }
-                                                return <div {...props}></div>
-                                            }}
-                                        />
-                                        <div className="percent-label">{`${(self.state.stakes[key] || 0)}%`}</div>
-                                    </div>
-                                )}
-                            </div>
-                            : null}
-                        {self.state.loading && <Loading />}
-
+                        <ProducersList
+                            favorites={self.state.favorites}
+                            producers={self.state.producers}
+                            stakes={self.state.stakes}
+                            onSetStake={self.setStake.bind(self)}
+                            onSetFavorite={self.setFavorite.bind(self)}
+                        />
                     </TabPanel>
+                    {self.state.loading && <Loading />}
                 </Tabs>
             </div>
         </div>

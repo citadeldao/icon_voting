@@ -67,7 +67,6 @@ function init() {
     electron.ipcMain.on('/keystore', async (event, keystore, password) => {
         try {
             let wallet = IconWallet.loadKeystore(keystore, password);
-            console.log(wallet.getPrivateKey());
             event.sender.send('/keystore', wallet.getPrivateKey());
         }
         catch (err) {
@@ -116,14 +115,24 @@ function init() {
     electron.ipcMain.on('/favorites', async (event, account) => {
         try {
             if (account) {
-                await db.updateAsync({
-                    model: 'Favorite',
-                    address: account.address
-                }, {
-                    model: 'Favorite',
-                    address: account.address,
-                    alias: account.alias
-                }, { upsert: true });
+                let { address, alias, add } = account;
+                console.log(address, alias, add)
+                if (add) {
+                    await db.updateAsync({
+                        model: 'Favorite',
+                        address: address
+                    }, {
+                        model: 'Favorite',
+                        address: address,
+                        alias: alias
+                    }, { upsert: true });
+                }
+                else {
+                    await db.removeAsync({
+                        model: 'Favorite',
+                        address: address
+                    });
+                }
             }
 
             event.sender.send('/favorites', (await db.findAsync({
