@@ -4,6 +4,7 @@ import { IconWallet } from 'icon-sdk-js';
 import logo from "../../logo.svg";
 import { NotificationManager } from 'react-notifications';
 import { Loading } from '../loading/Loading';
+const { ipcRenderer } = window.require('electron');
 
 export class Login extends Component {
     constructor(props) {
@@ -12,7 +13,41 @@ export class Login extends Component {
             keystore: localStorage.getItem('keystore'),
             password: localStorage.getItem('password'),
             wallet: localStorage.getItem('wallet'),
-            loading: false
+            loading: true
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.keystore && this.state.password) {
+            this.login();
+        }
+    }
+
+    login() {
+        let self = this;
+        if (self.state && self.state.keystore) {
+            self.setState({ loading: true });
+            ipcRenderer.send('/keystore', self.state.keystore, self.state.password)
+            ipcRenderer.on('/keystore', (event, privateKey) => {
+                self.setState({ wallet: IconWallet.loadPrivateKey(privateKey) }, () => {
+                    localStorage.setItem('keystore', self.state.keystore);
+                    localStorage.setItem('password', self.state.password);
+                    NotificationManager.success(self.state.wallet.getAddress());
+                    if (self.props.onLoginSuccess) {
+                        self.props.onLoginSuccess(self.state.wallet);
+                    }
+                });
+            });
+            ipcRenderer.on('/error', err => {
+                let errText = typeof (err) == 'string'
+                    ? err.split(/\[(.*)\]/).pop()
+                    : err ? err.message : err;
+                NotificationManager.warning(errText);
+            });
+        }
+        else {
+            NotificationManager.warning('Failed(no keystore specified)');
+            return false;
         }
     }
 
@@ -36,39 +71,7 @@ export class Login extends Component {
                     }
                 }} />
                 <input type="password" placeholder="ICX password" onChange={(e) => { self.setState({ password: e.target.value }) }} />
-                <button onClick={() => {
-
-                    Promise.resolve()
-                        .then(() => new Promise(resolve => self.setState({ loading: true }, resolve)))
-                        .then(() => {
-                            if (self.state && self.state.keystore) {
-                                let wallet = IconWallet.loadKeystore(self.state.keystore, self.state.password);
-                                self.setState({ wallet: wallet });
-                                return true;
-                            }
-                            else {
-                                NotificationManager.warning('Failed(no keystore specified)');
-                                return false;
-                            }
-                        })
-                        .catch(err => {
-                            let errText = typeof (err) == 'string' ? err.split(/\[(.*)\]/).pop() : err;
-                            NotificationManager.warning(errText);
-                            return false;
-                        })
-                        .then(success => {
-                            self.setState({ loading: false });
-
-                            if (success) {
-                                localStorage.setItem('keystore', self.state.keystore);
-                                localStorage.setItem('password', self.state.password);
-                                NotificationManager.success(self.state.wallet.getAddress());
-                                if (self.props.onLoginSuccess) {
-                                    self.props.onLoginSuccess();
-                                }
-                            }
-                        })
-                }}>Start</button>
+                {!self.state.loading && <button onClick={self.login.bind(self)}>Start</button>}
             </div>
 
             {self.state.loading && <Loading />}
