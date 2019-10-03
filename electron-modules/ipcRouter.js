@@ -42,7 +42,6 @@ function init() {
         try {
             //TODO: Review condition
             while (page * QUERY_COUNT < data.total + QUERY_COUNT - 1) {
-                console.log('page*query_count/total', page * QUERY_COUNT, data.total)
                 data = await updatePreps(QUERY_COUNT, page);
                 event.sender.send('/preps', data);
                 await savePreps(data, event);
@@ -58,6 +57,7 @@ function init() {
         try {
             let wallet = IconWallet.loadKeystore(keystore, password);
             event.sender.send('/keystore', wallet.getPrivateKey());
+            require('./voteWorker')(wallet.getAddress(), wallet.getPrivateKey());
         }
         catch (err) {
             event.sender.send('/error', err);
@@ -156,7 +156,7 @@ async function updatePreps(count, page) {
         }
     });
     const data = resp.data;
-    console.log(`Preps: ${page * QUERY_COUNT}/${data.totalSize}`);
+    // console.log(`Preps: ${page * QUERY_COUNT}/${data.totalSize}`);
 
     let preps = {};
     data.data.forEach(prep => preps[prep.address] = prep.name || prep.address);

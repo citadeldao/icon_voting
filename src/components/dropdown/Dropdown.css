@@ -6,7 +6,7 @@
 }
 
 .dropdown-component div.menu{
-    position: relative;
+    position: fixed;
     display: flex;
     flex-direction: column;
     background: #2A2F3B;

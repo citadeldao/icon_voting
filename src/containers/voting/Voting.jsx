@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
 import { PrepsList } from './components/PrepsList';
-import { NotificationManager } from 'react-notifications';
 const electron = window.require('electron');
 
 export class Voting extends Component {
@@ -24,7 +23,7 @@ export class Voting extends Component {
         electron.ipcRenderer.on('/preps', (event, data) => {
             let preps = this.state.preps;
             preps = Object.assign(preps, data.preps);
-            NotificationManager.warning(JSON.stringify([Object.keys(preps).length, data.total]))
+
             this.setState({
                 preps: preps,
                 loading: Object.keys(preps).length < data.total

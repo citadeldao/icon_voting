@@ -1,5 +1,5 @@
 const IconService = require('icon-sdk-js');
-const { IconWallet, IconBuilder, HttpProvider } = IconService;
+const { IconWallet, IconBuilder, HttpProvider, SignedTransaction } = IconService;
 
 const UPDATE_INTERVAL = 300000;
 const API_URL = 'https://ctz.solidwallet.io/api/v3';
@@ -39,14 +39,19 @@ async function start(myAddress, privateKey) {
         //STEP 2: CLAIM AVAILABLE ISCORE
         let claimIScoreResult = await iconService.sendTransaction(
             new SignedTransaction(new IconBuilder.CallTransactionBuilder()
+                .from(myAddress)
                 .to('cx0000000000000000000000000000000000000000')
                 .version('0x3')
                 .nid('0x1')
                 .nonce('0x0')
                 .value('0x0')
+                //TODO: Review
+                .stepLimit(IconService.IconConverter.toBigNumber(108000))
+                .timestamp(Date.now() * 1000)
                 .method('claimIScore')
                 .build(), iconWallet)
         ).execute();
+
         console.log('claimIScoreResult', claimIScoreResult);
 
         //STEP 3: GET AVAILABLE BALANCE FOR STAKING(from iostabc)
@@ -68,12 +73,16 @@ async function start(myAddress, privateKey) {
         //STEP 5: STAKE ALL AVAILABLE BALANCE
         let setStakeResult = await iconService.sendTransaction(
             new SignedTransaction(new IconBuilder.CallTransactionBuilder()
+                .from(myAddress)
                 .to('cx0000000000000000000000000000000000000000')
                 .version('0x3')
                 .nid('0x1')
                 .nonce('0x0')
                 .value('0x0')
                 .method('setStake')
+                //TODO: Review
+                .stepLimit(IconService.IconConverter.toBigNumber(125000))
+                .timestamp(Date.now() * 1000)
                 .params({ value: valueToStake })
                 .build(), iconWallet)
         ).execute();
@@ -99,16 +108,19 @@ async function start(myAddress, privateKey) {
         //STEP 7: VOTE FOR ADDRESS
         let setDelegationResult = await iconService.sendTransaction(
             new SignedTransaction(new IconBuilder.CallTransactionBuilder()
+                .from(myAddress)
                 .to('cx0000000000000000000000000000000000000000')
                 .version('0x3')
                 .nid('0x1')
                 .nonce('0x0')
                 .value('0x0')
+                //TODO: Review
+                .stepLimit(IconService.IconConverter.toBigNumber(125000 + 25000 * stakes.length))
+                .timestamp(Date.now() * 1000)
                 .method('setDelegation')
                 .params({
                     delegations: stakes.map(stake => ({
                         address: stake.address,
-
                     }))
                 })
                 .build(), iconWallet)
