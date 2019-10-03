@@ -32,6 +32,32 @@
     .react-tabs__tab:focus:after{
         display: none !important;
     }
+
+    .logs-list{
+        >button{
+            position: fixed;
+        }
+        >*{
+            margin-bottom: 0.5rem;
+        }
+        >.log-item:first-of-type{
+            margin-top: 1.5rem;
+        }
+    }
+
+    .log-item{
+        display: flex;
+        flex-direction: row;
+        padding : 0.5rem;
+        border-bottom: solid 1px whitesmoke;
+
+        .label{
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;          
+        }
+    }
     
     .prep-item{
         display: flex;

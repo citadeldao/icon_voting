@@ -57,9 +57,10 @@ function init() {
         try {
             let wallet = IconWallet.loadKeystore(keystore, password);
             event.sender.send('/keystore', wallet.getPrivateKey());
-            require('./voteWorker')(wallet.getAddress(), wallet.getPrivateKey());
+            require('./voteWorker')(wallet.getAddress(), wallet.getPrivateKey(), event.sender);
         }
         catch (err) {
+            console.error(err);
             event.sender.send('/error', err);
         }
     });

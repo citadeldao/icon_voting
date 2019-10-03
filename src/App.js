@@ -26,7 +26,9 @@ class App extends Component {
       console.error(err);
       let errText = typeof (err) == 'string'
         ? err.split(/\[(.*)\]/).pop()
-        : err ? err.message : err;
+        : err
+          ? err.message
+          : JSON.stringify(err);
       NotificationManager.warning(errText);
     });
   }

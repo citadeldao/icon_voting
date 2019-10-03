@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
 import { PrepsList } from './components/PrepsList';
+import { LogsList } from './components/LogsList';
 const electron = window.require('electron');
 
 export class Voting extends Component {
@@ -14,7 +15,8 @@ export class Voting extends Component {
             loading: true,
             preps: {},
             favorites: {},
-            stakes: {}
+            stakes: {},
+            logs: []
         };
     }
 
@@ -37,9 +39,15 @@ export class Voting extends Component {
 
         electron.ipcRenderer.send('/favorites');
         electron.ipcRenderer.on('/favorites', (event, favorites) => {
-            console.log(favorites)
             this.setState({ favorites: favorites });
-        })
+        });
+
+        electron.ipcRenderer.send('/logs');
+        electron.ipcRenderer.on('/logs', (event, logItem) => {
+            let logs = this.state.logs;
+            logs.push(logItem);
+            this.setState({ logs: logs });
+        });
     }
 
     setFavorite(address, add) {
@@ -54,6 +62,10 @@ export class Voting extends Component {
         electron.ipcRenderer.send('/stake', { address: address, value: value });
     }
 
+    clearLogs() {
+        this.setState({ logs: [] });
+    }
+
     render() {
         const self = this;
         return <div className="voting-container">
@@ -63,6 +75,7 @@ export class Voting extends Component {
                     <TabList>
                         <Tab>Favorite</Tab>
                         <Tab>All</Tab>
+                        <Tab>Logs</Tab>
                     </TabList>
 
                     <TabPanel>
@@ -82,6 +95,11 @@ export class Voting extends Component {
                             onSetStake={self.setStake.bind(self)}
                             onSetFavorite={self.setFavorite.bind(self)}
                         />
+                    </TabPanel>
+                    <TabPanel>
+                        <LogsList
+                            logs={self.state.logs}
+                            onClearLogs={self.clearLogs} />
                     </TabPanel>
                     {self.state.loading && <Loading />}
                 </Tabs>
