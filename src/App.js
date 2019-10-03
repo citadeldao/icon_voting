@@ -36,12 +36,12 @@ class App extends Component {
   render() {
     return (
       <div className="App" >
-        <Header />
+        <Header ref="header" />
         <div className="app-content">
           {({
             'loading': <Loading />,
             'login': <Login onLoginSuccess={() => this.setState({ screen: 'voting' })} />,
-            'voting': <Voting />
+            'voting': <Voting header={this.refs.header} />
           })[this.state.screen]}
         </div>
         <NotificationContainer />

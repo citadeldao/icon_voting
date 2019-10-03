@@ -18,3 +18,47 @@ div.header>h2{
     font-style: normal;
     font-weight: normal;
 }
+
+div.header-auth{
+    background: #0D0F19;
+    /* padding: 1rem 0rem; */
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 0rem 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 3rem;
+}
+
+div.header-auth > .auth-user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+div.header-auth > .auth-user > a{
+    color: white !important;
+    margin: 0rem 0.5rem;
+    font-size: 10pt;
+}
+
+div.header-auth > .auth-user > a[href]{
+    text-decoration: none !important;
+}
+
+div.header-auth .dropdown-component button svg {
+    fill: #FFF;
+}
+
+
+div.header-auth>h2{
+    margin: 0px;
+    font-size: 12pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
