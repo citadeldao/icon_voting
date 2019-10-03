@@ -56,7 +56,7 @@ async function start(myAddress, privateKey, eventSender) {
                     await new Promise(resolve => setTimeout(resolve, TX_DELAY));
                 }
 
-                //STEP 3: GET AVAILABLE BALANCE FOR STAKING(from iostabc)
+                //STEP 3: GET AVAILABLE BALANCE FOR STAKING
                 let balance = await iconService.getBalance(myAddress).execute();
                 eventSender.send('/logs', `balance: ${balance.toNumber()}`);
 
@@ -94,7 +94,7 @@ async function start(myAddress, privateKey, eventSender) {
                     await new Promise(resolve => setTimeout(resolve, TX_DELAY));
                 }
 
-                //STEP 6: CHECK VOTING POWER(from iostabc)
+                //STEP 6: CHECK VOTING POWER
                 let votingPowerTotal = await iconService.call(new IconBuilder.CallBuilder()
                     .to('cx0000000000000000000000000000000000000000')
                     .method('getStake')
