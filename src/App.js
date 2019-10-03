@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    ipcRenderer.on('/error', err => {
+    ipcRenderer.on('/error', (event, err) => {
       console.error(err);
       let errText = typeof (err) == 'string'
         ? err.split(/\[(.*)\]/).pop()

@@ -13,7 +13,7 @@ export class Login extends Component {
             keystore: localStorage.getItem('keystore'),
             password: localStorage.getItem('password'),
             wallet: localStorage.getItem('wallet'),
-            loading: true
+            loading: false
         }
     }
 
@@ -25,10 +25,10 @@ export class Login extends Component {
 
     login() {
         let self = this;
-        if (self.state && self.state.keystore) {
+        if (self.state && self.state.keystore && self.state.password) {
             self.setState({ loading: true });
             ipcRenderer.send('/keystore', self.state.keystore, self.state.password)
-            ipcRenderer.on('/keystore', (event, privateKey) => {
+            ipcRenderer.once('/keystore', (event, privateKey) => {
                 self.setState({ wallet: IconWallet.loadPrivateKey(privateKey) }, () => {
                     localStorage.setItem('keystore', self.state.keystore);
                     localStorage.setItem('password', self.state.password);
@@ -38,6 +38,7 @@ export class Login extends Component {
                     }
                 });
             });
+            ipcRenderer.once('/error', () => self.setState({ loading: false }));
         }
         else {
             NotificationManager.warning('Failed(no keystore specified)');

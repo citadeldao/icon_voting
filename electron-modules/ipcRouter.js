@@ -1,44 +1,32 @@
 const electron = require('electron');
 const axios = require('axios');
 const { IconWallet } = require('icon-sdk-js');
-//SQLite has issues with init, other DBMS-es are required to be installed separate or untested
-const Datastore = require('nedb');
-const Bluebird = require('bluebird');
-const path = require('path');
 
 const { ValidationError, TransactionError } = require('./utils/errors');
 
-//{model: 'Stake|Favorite|Producer', ...}
-const db = new Datastore({ filename: path.join(__dirname, '../store.db'), autoload: true });
-Bluebird.promisifyAll(db);
+//{model: 'Stake|Favorite|Prep', ...}
+const db = require('./db');
 
-const IOSTABC_API_URL = 'https://www.iostabc.com/api/producers?sort_by=votes&order=desc';
-
+const TRACKER_ICON_API_URL = 'https://tracker.icon.foundation/v3/iiss/prep/list';
+const QUERY_COUNT = 50;
 
 function init() {
-    electron.ipcMain.on('/producers', async (event) => {
+    electron.ipcMain.on('/preps', async (event) => {
         let page = 1;
-        let data = null;
-        try {
-            data = await updateProducers(page);
-        }
-        catch (err) {
-            return event.sender.send('/error', err);
-        }
-        saveProducers(data, event);
+        let data = await updatePreps(1, page);
 
         let count = 0;
         try {
-            count = await db.countAsync({ model: 'Producer' });
+            count = await db.countAsync({ model: 'Prep' });
 
             if (count == data.total) {
                 console.log('Cache is actual')
-                let producers = await db.findAsync({ model: 'Producer' });
+                let preps = await db.findAsync({ model: 'Prep' });
 
-                return event.sender.send('/producers', {
+                return event.sender.send('/preps', {
                     count: count,
                     total: data.total,
-                    producers: producers.reduce((prev, next) => {
+                    preps: preps.reduce((prev, next) => {
                         prev[next.address] = next.alias;
                         return prev;
                     }, {})
@@ -51,12 +39,14 @@ function init() {
             event.sender.send('/error', err);
         }
 
-
         try {
-            while (page * data.size < data.total) {
-                event.sender.send('/producers', data);
-                data = await updateProducers(++page);
-                await saveProducers(data, event);
+            //TODO: Review condition
+            while (page * QUERY_COUNT < data.total + QUERY_COUNT - 1) {
+                console.log('page*query_count/total', page * QUERY_COUNT, data.total)
+                data = await updatePreps(QUERY_COUNT, page);
+                event.sender.send('/preps', data);
+                await savePreps(data, event);
+                page++;
             }
         }
         catch (err) {
@@ -116,7 +106,7 @@ function init() {
         try {
             if (account) {
                 let { address, alias, add } = account;
-                console.log(address, alias, add)
+
                 if (add) {
                     await db.updateAsync({
                         model: 'Favorite',
@@ -148,29 +138,30 @@ function init() {
     });
 }
 
-async function saveProducers(data) {
-    await Promise.all(Object.keys(data.producers)
-        .map(key => db.updateAsync({ model: 'Producer', address: key }, {
-            model: 'Producer',
+async function savePreps(data) {
+    await Promise.all(Object.keys(data.preps)
+        .map(key => db.updateAsync({ model: 'Prep', address: key }, {
+            model: 'Prep',
             address: key,
-            alias: data.producers[key]
+            alias: data.preps[key]
         }, { upsert: 1 }))
     );
 }
 
-async function updateProducers(page = 1) {
-    const resp = await axios.get(IOSTABC_API_URL, {
+async function updatePreps(count, page) {
+    const resp = await axios.get(TRACKER_ICON_API_URL, {
         params: {
+            count: count,
             page: page
         }
-    })
+    });
     const data = resp.data;
-    console.log({ page: page, size: data.size, total: data.total })
-    console.log(`Producers: ${page * data.size}/${data.total}`);
+    console.log(`Preps: ${page * QUERY_COUNT}/${data.totalSize}`);
 
-    let producers = {};
-    data.producers.forEach(producer => producers[producer.account] = producer.alias || producer.account);
-    return { size: data.size, total: data.total, producers: producers };
+    let preps = {};
+    data.data.forEach(prep => preps[prep.address] = prep.name || prep.address);
+
+    return { total: data.totalSize, preps: preps };
 }
 
 module.exports = init;

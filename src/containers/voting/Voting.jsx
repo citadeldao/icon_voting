@@ -4,7 +4,8 @@ import 'react-tabs/style/react-tabs.css';
 import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
-import { ProducersList } from './components/ProducersList';
+import { PrepsList } from './components/PrepsList';
+import { NotificationManager } from 'react-notifications';
 const electron = window.require('electron');
 
 export class Voting extends Component {
@@ -12,19 +13,21 @@ export class Voting extends Component {
         super(props);
         this.state = {
             loading: true,
-            producers: {},
+            preps: {},
             favorites: {},
             stakes: {}
         };
     }
 
     componentDidMount() {
-        electron.ipcRenderer.send('/producers');
-        electron.ipcRenderer.on('/producers', (event, data) => {
-            let producers = this.state.producers;
+        electron.ipcRenderer.send('/preps');
+        electron.ipcRenderer.on('/preps', (event, data) => {
+            let preps = this.state.preps;
+            preps = Object.assign(preps, data.preps);
+            NotificationManager.warning(JSON.stringify([Object.keys(preps).length, data.total]))
             this.setState({
-                producers: Object.assign(producers, data.producers),
-                loading: Object.keys(producers).length < data.total
+                preps: preps,
+                loading: Object.keys(preps).length < data.total
             })
         });
 
@@ -43,7 +46,7 @@ export class Voting extends Component {
     setFavorite(address, add) {
         electron.ipcRenderer.send('/favorites', {
             address: address,
-            alias: this.state.producers[address],
+            alias: this.state.preps[address],
             add: add
         });
     }
@@ -64,18 +67,18 @@ export class Voting extends Component {
                     </TabList>
 
                     <TabPanel>
-                        <ProducersList
+                        <PrepsList
                             favorites={self.state.favorites}
-                            producers={self.state.favorites}
+                            preps={self.state.favorites}
                             stakes={self.state.stakes}
                             onSetStake={self.setStake.bind(self)}
                             onSetFavorite={self.setFavorite.bind(self)}
                         />
                     </TabPanel>
                     <TabPanel>
-                        <ProducersList
+                        <PrepsList
                             favorites={self.state.favorites}
-                            producers={self.state.producers}
+                            preps={self.state.preps}
                             stakes={self.state.stakes}
                             onSetStake={self.setStake.bind(self)}
                             onSetFavorite={self.setFavorite.bind(self)}

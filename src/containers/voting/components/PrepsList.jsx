@@ -2,20 +2,20 @@ import ReactSlider from 'react-slider';
 import Dropdown from '../../../components/dropdown/Dropdown';
 import React, { Component } from 'react';
 
-export class ProducersList extends Component {
+export class PrepsList extends Component {
     render() {
         const self = this;
-        return <div className="producers-list">
-            {Object.keys(self.props.producers).length
+        return <div className="preps-list">
+            {Object.keys(self.props.preps).length
                 ? <div>{
-                    Object.keys(self.props.producers).map((key) =>
-                        <div title={key} key={key} className="producer-item">
+                    Object.keys(self.props.preps).map((key) =>
+                        <div title={key} key={key} className="prep-item">
                             <Dropdown items={[{
                                 key: key,
                                 name: self.props.favorites[key] ? 'Remove from favorites' : 'Add to favorites',
                                 action: () => self.props.onSetFavorite(key, !self.props.favorites[key])
                             }]} />
-                            <div className="label">{self.props.producers[key]}</div>
+                            <div className="label">{self.props.preps[key]}</div>
                             <ReactSlider
                                 value={self.props.stakes[key]}
                                 onChange={value => this.props.onSetStake(key, value)}
