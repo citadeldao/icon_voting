@@ -15,7 +15,11 @@ export default class Dropdown extends Component {
     showMenu(event) {
         event.preventDefault();
 
-        this.setState({ showMenu: true }, () => {
+        this.setState({
+            showMenu: true,
+            menuLeft: event.clientX,
+            menuTop: event.clientY
+        }, () => {
             document.addEventListener('click', this.closeMenu);
         });
     }
@@ -42,6 +46,10 @@ export default class Dropdown extends Component {
                         ? (
                             <div
                                 className="menu"
+                                style={{
+                                    left: this.state.menuLeft,
+                                    top: this.state.menuTop
+                                }}
                                 ref={(element) => {
                                     this.dropdownMenu = element;
                                 }}
