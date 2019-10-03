@@ -35,3 +35,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.App button{
+  outline: none;
+  border: none;
+  background: #0063F7;
+  color: white;
+  font-size: 9pt;
+  padding: 0.3rem 1rem;
+  border-radius: 0.2rem;
+}

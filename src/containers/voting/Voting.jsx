@@ -104,7 +104,7 @@ export class Voting extends Component {
                     <TabPanel>
                         <LogsList
                             logs={self.state.logs}
-                            onClearLogs={self.clearLogs} />
+                            onClearLogs={self.clearLogs.bind(self)} />
                     </TabPanel>
                     {self.state.loading && <Loading />}
                 </Tabs>
