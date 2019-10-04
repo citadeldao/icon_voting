@@ -32,6 +32,7 @@ export class Login extends Component {
                 self.setState({ wallet: IconWallet.loadPrivateKey(privateKey) }, () => {
                     localStorage.setItem('keystore', self.state.keystore);
                     localStorage.setItem('password', self.state.password);
+                    localStorage.setItem('address', self.state.wallet.getAddress());
                     NotificationManager.success(self.state.wallet.getAddress());
                     if (self.props.onLoginSuccess) {
                         self.props.onLoginSuccess(self.state.wallet);

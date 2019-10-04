@@ -1,4 +1,4 @@
-# Power Vote
+# Icon Power Vote
 Icon auto-voting app
 
 ![screenshot](https://github.com/cybor97/icon_voting/blob/master/Selection_518.png)

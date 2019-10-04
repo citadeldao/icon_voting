@@ -1,25 +1,27 @@
-div.header{
+div.header {
     background: #0D0F19;
     /* padding: 1rem 0rem; */
     position: fixed;
     top: 0px;
-    left:0px;
-    right:0px;
+    left: 0px;
+    right: 0px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height:4rem;
+    height: 3rem;
 }
 
-div.header>h2{
+div.header>h2 {
     margin: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-style: normal;
     font-weight: normal;
+    font-size: 14pt;
+    color: #DADADA;
 }
 
-div.header-auth{
+div.header-auth {
     background: #0D0F19;
     /* padding: 1rem 0rem; */
     position: fixed;
@@ -34,16 +36,23 @@ div.header-auth{
     height: 3rem;
 }
 
-div.header-auth > .auth-user{
+div.header-auth>.auth-user {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-div.header-auth > .auth-user > span{
+div.header-auth>.auth-user>span {
     color: white;
     margin: 0rem 0.5rem;
     font-size: 10pt;
+}
+
+div.header-auth>.auth-user>.user-name {
+    max-width: 5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 div.header-auth .dropdown-component button svg {
@@ -51,7 +60,7 @@ div.header-auth .dropdown-component button svg {
 }
 
 
-div.header-auth>h2{
+div.header-auth>h2 {
     margin: 0px;
     font-size: 12pt;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
