@@ -1,10 +1,12 @@
 const electron = require('electron');
 const isDev = require('electron-is-dev');
+const path = require('path');
 
 const BrowserWindow = electron.BrowserWindow;
 
 function init() {
     const app = electron.app;
+
 
     if (app.makeSingleInstance) {
         var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
@@ -31,6 +33,12 @@ function init() {
         if (mainWindow === null) {
             createWindow();
         }
+    });
+
+    app.on('will-finish-launching', () => {
+        electron.protocol.registerSchemesAsPrivileged([
+            { scheme: 'file', privileges: { bypassCSP: true } }
+        ])
     });
 
 }
