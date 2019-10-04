@@ -10,4 +10,4 @@ Icon auto-voting app
 3. `yarn install`
 4. `npm rebuild`
 5. `yarn start` (to debug)
-6. `yarn build` (to build app, executables will be generated in /dist folter)
+6. `yarn build` (to build app, executables will be generated in /dist folder)
