@@ -1,4 +1,4 @@
-.login-container{
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,20 +8,63 @@
     >h1 {
         margin-top: 0px;
         margin-bottom: 2rem;
+        font-style: normal;
+        font-weight: 200;
     }
 
     >p {
         margin: 0px;
+        text-align: center;
     }
 
-
-    > .login-form{
+    >.login-form {
         display: flex;
         flex-direction: column;
         margin-top: 2rem;
-    
-        > * {
+        width: 100%;
+
+        >* {
             margin-bottom: 1rem;
+        }
+
+        >.password-input {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            >input {
+                width: calc(100% - 12px - 0.4rem);
+            }
+
+            >svg {
+                margin-bottom: 0.2rem;
+                margin-left: calc(-24px - 0.5rem);
+                fill: #ECEFF1;
+            }
+        }
+
+        >.password-input.show-password {
+            >svg {
+                fill: #0063F7;
+            }
+        }
+
+        .file-input {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 1rem;
+            justify-content: center;
+
+            >input {
+                display: none;
+            }
+
+            >.file-input-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
         }
     }
 }

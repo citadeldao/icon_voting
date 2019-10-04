@@ -1,3 +1,7 @@
+body {
+  font-family: 'Segoe UI'sans-serif;
+}
+
 .app-content {
   margin-top: 4rem;
   height: calc(100vh - 4rem);
@@ -51,6 +55,20 @@
   font-size: 9pt;
   padding: 0.3rem 1rem;
   border-radius: 0.2rem;
+}
+
+.App input,
+.App .input {
+  background: #191d2f;
+  border: solid 1px #757575;
+  color: #DADADA;
+  outline: none;
+  border-radius: 0.2rem;
+  padding: 0.5rem;
+}
+
+.App .accent {
+  color: #0063F7;
 }
 
 .App .react-tabs__tab--selected {
