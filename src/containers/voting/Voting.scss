@@ -1,99 +1,72 @@
-.voting-container{
+.voting-container {
     height: 100%;
     display: flex;
     flex-direction: column;
 
-    h2{
+    h2 {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: normal;
-        
     }
 
-    .votes-controls{
+    .votes-controls {
         height: 100%;
         display: flex;
         flex-direction: column;
     }
-    
-    .react-tabs{
+
+    .react-tabs {
         height: 100%;
         display: flex;
         flex-direction: column;
     }
-    
-    .react-tabs__tab-panel.react-tabs__tab-panel--selected{
+
+    .react-tabs__tab-panel.react-tabs__tab-panel--selected {
         display: flex;
         flex-direction: column;
         height: 100%;
         overflow-y: auto;
     }
 
-    .react-tabs__tab:focus:after{
+    .react-tabs__tab:focus:after {
         display: none !important;
     }
 
-    .logs-list{
-        >button{
-            position: fixed;
-        }
-        >*{
-            margin-bottom: 0.5rem;
-        }
-        >.log-item:first-of-type{
-            margin-top: 1.5rem;
-        }
-    }
-
-    .log-item{
+    .prep-item {
         display: flex;
         flex-direction: row;
-        padding : 0.5rem;
-        border-bottom: solid 1px whitesmoke;
-
-        .label{
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;          
-        }
-    }
-    
-    .prep-item{
-        display: flex;
-        flex-direction: row;
-        padding : 1rem;
+        padding: 1rem;
         align-items: center;
 
-        .label{
+        .label {
             width: 12rem;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;          
+            text-overflow: ellipsis;
         }
 
-        .percent-label{
+        .percent-label {
             width: 4rem;
         }
 
-        .horizontal-slider{
+        .horizontal-slider {
             width: 100%; //calc(100% - 15rem);
         }
 
-        > *{
+        >* {
             margin-left: 0.5rem;
         }
 
-        > *:first-child{
+        >*:first-child {
             margin-left: 0px;
         }
     }
 
-    .loading-container{
+    .loading-container {
         height: 100%;
     }
 
-    .promo-container{
+    .promo-container {
         height: 5rem;
         width: 100%;
         // position: fixed;
@@ -105,36 +78,34 @@
         align-items: center;
         justify-content: space-between;
 
-        >*{
+        >* {
             margin: 0rem 0.5rem;
         }
-        >a{
-            color: white !important;
+
+        >span {
+            color: white;
             font-family: Segoe UI;
             font-size: 9pt;
             margin-right: 0.5rem;
         }
-        >a[href]{
-            text-decoration: none !important;
-        }
     }
-    
-    .horizontal-slider{
-        > .track {
+
+    .horizontal-slider {
+        >.track {
             height: 0.2rem;
         }
-    
-        > .track.track-0 {
-            background:#FBC02D;
+
+        >.track.track-0 {
+            background: #FBC02D;
             margin-right: 0.5rem;
         }
-    
-        > .track.track-1 {
-            background:rgba(255, 193, 7, 0.12);
+
+        >.track.track-1 {
+            background: rgba(255, 193, 7, 0.12);
         }
-    
-        >.thumb{
-            background:#FBC02D;
+
+        >.thumb {
+            background: #FBC02D;
             height: 1rem;
             width: 1rem;
             border-radius: 0.5rem;
@@ -142,6 +113,6 @@
             margin-top: -0.4rem;
 
         }
-    
+
     }
 }

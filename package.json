@@ -44,7 +44,7 @@
     "electron": "electron .",
     "electron-build": "electron-builder",
     "release": "yarn react-build && node fixChunks && electron-builder --publish=always",
-    "build": "yarn react-build && node fixChunks && yarn electron-build --linux",
+    "build": "yarn react-build && node fixChunks && yarn electron-build --linux --windows",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {

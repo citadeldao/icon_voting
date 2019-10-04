@@ -26,7 +26,7 @@ div.header-auth{
     top: 0px;
     left: 0px;
     right: 0px;
-    padding: 0rem 1rem;
+    padding-left: 1rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -40,14 +40,10 @@ div.header-auth > .auth-user{
     align-items: center;
 }
 
-div.header-auth > .auth-user > a{
-    color: white !important;
+div.header-auth > .auth-user > span{
+    color: white;
     margin: 0rem 0.5rem;
     font-size: 10pt;
-}
-
-div.header-auth > .auth-user > a[href]{
-    text-decoration: none !important;
 }
 
 div.header-auth .dropdown-component button svg {

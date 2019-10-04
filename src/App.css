@@ -1,10 +1,11 @@
-.app-content{
+.app-content {
   margin-top: 4rem;
   height: calc(100vh - 4rem);
   font-size: 14px;
+  user-select: none;
 }
 
-.footer{
+.footer {
   position: fixed;
   bottom: 0px;
   width: 100%;
@@ -19,8 +20,14 @@
   margin-bottom: 3rem;
 }
 
-.logo-container > p {
+.logo-container>p {
   color: #757575;
+}
+
+.buttons-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .App .notification-container {
@@ -30,13 +37,13 @@
   padding: 0px;
 }
 
-.App .notification-success .message{
+.App .notification-success .message {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.App button{
+.App button {
   outline: none;
   border: none;
   background: #0063F7;
@@ -44,4 +51,23 @@
   font-size: 9pt;
   padding: 0.3rem 1rem;
   border-radius: 0.2rem;
+}
+
+.App .react-tabs__tab--selected {
+  outline: none;
+  box-shadow: none;
+  background: #313849;
+  border-bottom: solid 2px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: unset;
+  border-color: #0063F7;
+  color: unset;
+}
+
+.App .react-tabs__tab:focus {
+  box-shadow: none;
+  border-color: inherit;
+  border-color: #0063F7;
 }
