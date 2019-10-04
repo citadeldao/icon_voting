@@ -3,6 +3,11 @@
     display: flex;
     flex-direction: column;
 
+    >* {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
     h2 {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
@@ -21,6 +26,12 @@
         flex-direction: column;
     }
 
+    .react-tabs__tab {
+        text-transform: uppercase;
+        font-size: 9pt;
+        padding: 0.5rem 1rem;
+    }
+
     .react-tabs__tab-panel.react-tabs__tab-panel--selected {
         display: flex;
         flex-direction: column;
@@ -35,7 +46,7 @@
     .prep-item {
         display: flex;
         flex-direction: row;
-        padding: 1rem;
+        padding: 1rem 0rem;
         align-items: center;
 
         .label {
@@ -77,16 +88,21 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin: 0px;
 
-        >* {
-            margin: 0rem 0.5rem;
+        >*:first-child {
+            margin-left: 1rem;
         }
+
+        >*:last-child {
+            margin-right: 1rem;
+        }
+
 
         >span {
             color: white;
             font-family: Segoe UI;
             font-size: 9pt;
-            margin-right: 0.5rem;
         }
     }
 
