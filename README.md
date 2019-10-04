@@ -5,7 +5,7 @@ Icon auto-voting app
 
 
 # Build
-1. `git glone https://github.com/cybor97/icon_voting`
+1. `git clone https://github.com/cybor97/icon_voting`
 2. `sudo npm i -g yarn`
 3. `yarn install`
 4. `npm rebuild`
