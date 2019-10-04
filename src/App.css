@@ -1,12 +1,12 @@
 body {
   font-family: 'Segoe UI'sans-serif;
+  user-select: none;
 }
 
 .app-content {
   margin-top: 4rem;
   height: calc(100vh - 4rem);
   font-size: 14px;
-  user-select: none;
 }
 
 .footer {
@@ -88,4 +88,8 @@ body {
   box-shadow: none;
   border-color: inherit;
   border-color: #0063F7;
+}
+
+.App .notification-container .notification {
+  box-shadow: black;
 }
