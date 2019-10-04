@@ -67,14 +67,15 @@ export class Voting extends Component {
     }
 
     promoClick() {
-        this.setStake(PARADIGM_CITADEL_ADDRESS, 10);
+        if (this.state.stakes && this.state.stakes[PARADIGM_CITADEL_ADDRESS] < 10) {
+            this.setStake(PARADIGM_CITADEL_ADDRESS, 10);
+
+            let stakes = this.state.stakes;
+            stakes[PARADIGM_CITADEL_ADDRESS] = 10;
+            this.setState({ showPromo: false, stakes: stakes });
+            localStorage.setItem('promoAccepted', true);
+        }
         this.setFavorite(PARADIGM_CITADEL_ADDRESS, true);
-
-        let stakes = this.state.stakes;
-        stakes[PARADIGM_CITADEL_ADDRESS] = 10;
-        this.setState({ showPromo: false, stakes: stakes });
-        localStorage.setItem('promoAccepted', true);
-
     }
 
     render() {
