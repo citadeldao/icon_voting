@@ -66,6 +66,17 @@ export class Voting extends Component {
         this.setState({ logs: [] });
     }
 
+    promoClick() {
+        this.setStake(PARADIGM_CITADEL_ADDRESS, 10);
+        this.setFavorite(PARADIGM_CITADEL_ADDRESS, true);
+
+        let stakes = this.state.stakes;
+        stakes[PARADIGM_CITADEL_ADDRESS] = 10;
+        this.setState({ showPromo: false, stakes: stakes });
+        localStorage.setItem('promoAccepted', true);
+
+    }
+
     render() {
         const self = this;
         return <div className="voting-container">
@@ -104,13 +115,7 @@ export class Voting extends Component {
                     <path fillRule="evenodd" clipRule="evenodd" d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18ZM10 15C12.7614 15 15 12.7614 15 10C15 7.23858 12.7614 5 10 5C7.23858 5 5 7.23858 5 10C5 12.7614 7.23858 15 10 15Z" fill="#9E9E9E" />
                 </svg>
                 <span>Say thanks and sent Paradigm team 10% profit</span>
-                <button onClick={() => {
-                    self.setStake(PARADIGM_CITADEL_ADDRESS, 10);
-                    let stakes = self.state.stakes;
-                    stakes[PARADIGM_CITADEL_ADDRESS] = 10;
-                    self.setState({ showPromo: false, stakes: stakes });
-                    localStorage.setItem('promoAccepted', true);
-                }}>RUN</button>
+                <button onClick={self.promoClick.bind(self)}>RUN</button>
             </div>
         </div>
     }
