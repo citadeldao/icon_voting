@@ -91,5 +91,5 @@ body {
 }
 
 .App .notification-container .notification {
-  box-shadow: black;
+  box-shadow:  0 0 12px black;
 }
