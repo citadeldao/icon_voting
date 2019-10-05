@@ -1,10 +1,11 @@
 const electron = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
+const AutoLaunch = require('auto-launch');
 
 const BrowserWindow = electron.BrowserWindow;
 
-function init() {
+async function init() {
     const app = electron.app;
 
 
@@ -40,6 +41,16 @@ function init() {
             { scheme: 'file', privileges: { bypassCSP: true } }
         ])
     });
+
+    try {
+        let autoLauncher = new AutoLaunch({ name: 'Icon Power Vote' });
+        if (!(await autoLauncher.isEnabled())) {
+            await autoLauncher.enable();
+        }
+    }
+    catch (err) {
+        console.error(err);
+    }
 
 }
 
