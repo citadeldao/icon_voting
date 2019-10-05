@@ -12,7 +12,7 @@ Icon auto voting app by Paradigm Citadel. You can use this tool to automate dail
 # Release 
 [Windows](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote.Setup.0.1.1.exe)\
 [Mac](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.dmg)\
-Linux([Appimge](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.AppImage)/[Snap](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/icon_voting_0.1.1_amd64.snap))
+Linux ([Appimage](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.AppImage)/[Snap](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/icon_voting_0.1.1_amd64.snap))
 
 # Requirements
 1. NodeJS 10+
