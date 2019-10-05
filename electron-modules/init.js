@@ -27,7 +27,7 @@ async function init() {
 
     app.on("ready", () => {
         createWindow();
-        tray = new Tray(path.join(__dirname, '../public/icon_128.png'));
+        tray = new Tray(path.join(__dirname, '../public/icon_16.png'));
         const contextMenu = Menu.buildFromTemplate([
             {
                 label: 'Hide/Expand',
@@ -98,7 +98,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             preload: __dirname + '/preload.js',
-            icon: path.join(__dirname, './public/icon_128.png')
+            icon: path.join(__dirname, './public/icon_16.png')
         }
     });
 
