@@ -27,6 +27,19 @@ async function start(myAddress, privateKey, eventSender) {
     let lastUpdate = await db.findAsync({ model: 'LastUpdate' });
     eventSender.send('/logs', `lastUpdate: ${lastUpdate.length ? new Date(lastUpdate[0].time) : 'never'}`);
 
+    let forceUpdate = false;
+    let checkTimeout = null;
+    let checkResolve = null;
+    electron.ipcMain.on('/voter/run', () => {
+        forceUpdate = true;
+        if (checkTimeout) {
+            clearTimeout(checkTimeout);
+        }
+        if (checkResolve) {
+            checkResolve();
+        }
+    });
+
     while (true) {
         let lastUpdate = await db.findAsync({ model: 'LastUpdate' });
         let shouldUpdate = false;
@@ -41,11 +54,16 @@ async function start(myAddress, privateKey, eventSender) {
                 shouldUpdate = true;
             }
         }
-        console.log('last update, should update', lastUpdate, shouldUpdate)
 
+        console.log('last update, should update, forceUpdate', lastUpdate, shouldUpdate, forceUpdate);
 
-        if (shouldUpdate) {
-            eventSender.send('/logs', `Should update`);
+        if (shouldUpdate || forceUpdate) {
+            if (shouldUpdate) {
+                eventSender.send('/logs', `Should update`);
+            }
+            else {
+                eventSender.send('/logs', `Forced update`);
+            }
 
             let stakes = await db.findAsync({ model: 'Stake' });
 
@@ -130,7 +148,7 @@ async function start(myAddress, privateKey, eventSender) {
                     eventSender.send('/logs', `stakesValueSum: ${stakesValueSum}`);
 
                     if (stakesValueSum > 100) {
-                        throw new ValidationError(`Stakes value sum too large(${stakesValueSum} > 100)`);
+                        throw new ValidationError(`Stakes value sum too large (${stakesValueSum} > 100)`);
                     }
 
                     //STEP 7: VOTE FOR ADDRESS
@@ -161,15 +179,20 @@ async function start(myAddress, privateKey, eventSender) {
                 }
                 catch (err) {
                     console.error(err);
-                    eventSender.send('/error', err);
+                    eventSender.send('/error', err && err.message);
                 }
             }
             else {
                 eventSender.send('/logs', 'Skipped, invalid amount of votes');
             }
+
+            forceUpdate = false;
         }
 
-        await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
+        await new Promise(resolve => {
+            checkResolve = resolve;
+            checkTimeout = setTimeout(resolve, CHECK_INTERVAL);
+        });
     }
 }
 
