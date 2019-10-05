@@ -21,7 +21,8 @@
     "files": [
       "./build/**/*",
       "./electron-modules/**/*",
-      "./electron.js"
+      "./electron.js",
+      "./public/**/*"
     ]
   },
   "license": "ISC",

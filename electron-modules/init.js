@@ -97,7 +97,8 @@ function createWindow() {
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,
-            preload: __dirname + '/preload.js'
+            preload: __dirname + '/preload.js',
+            icon: path.join(__dirname, './public/icon_128.png')
         }
     });
 
