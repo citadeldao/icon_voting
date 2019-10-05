@@ -1,15 +1,26 @@
 # Icon Power Vote
-Icon auto voting app by Paradigm Citadel. You can use this tool to automate your voting process.
+Icon auto voting app by Paradigm Citadel. You can use this tool to automate daily voting process.
 
 ![screenshot1](https://github.com/paradigmcitadel/icon_voting/blob/master/screens/1.PNG)
 ![screenshot2](https://github.com/paradigmcitadel/icon_voting/blob/master/screens/2.PNG)
+
+# Tutorial
+1) Add your keystore file 
+2) Set percent for selected P-reps
+3) Run 
+
+# Release 
+[Windows](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote.Setup.0.1.1.exe)
+[Mac]() 
+[Ubuntu]()
+[CentOS]()
 
 # Requirements
 1. NodeJS 10+
 2. Python 2.7.* for Windows
 
 # Build
-1. `git clone https://github.com/cybor97/icon_voting`
+1. `git clone https://github.com/paradigmcitadel/icon_voting`
 2. `sudo npm i -g yarn` (without sudo for windows)
 3. `yarn install`
 4. `npm rebuild`
