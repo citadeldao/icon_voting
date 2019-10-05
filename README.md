@@ -10,8 +10,8 @@ Icon auto voting app by Paradigm Citadel. You can use this tool to automate dail
 3) Run 
 
 # Release 
-[Windows](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote.Setup.0.1.1.exe)
-[Mac](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.dmg) 
+[Windows](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote.Setup.0.1.1.exe)\
+[Mac](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.dmg)\
 Linux([Appimge](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/Icon.Power.Vote-0.1.1.AppImage)/[Snap](https://github.com/paradigmcitadel/icon_voting/releases/download/0.1.1/icon_voting_0.1.1_amd64.snap))
 
 # Requirements
@@ -35,3 +35,23 @@ Voting process starts strictly once per day(starting next day) if app is running
 ## Error: Module did not self-register.
 Somehow electron-builder breaks scss in build cache.
 Just run `npm run rebuild`.
+
+## Contacts
+
+</br>
+<p align="left">
+  <a href="http://orbs.paradigmcitadel.io">
+    <img src="https://icon.community/media/logos/paradigm.PNG" alt="Paradigm Citadel" width="150" height="150">
+  </a>
+  </br>
+
+If you need help, please contact us
+
+Telegram: [@grshabl](https://t.me/grshabl)
+
+Email: partners@paradigmfund.io
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
