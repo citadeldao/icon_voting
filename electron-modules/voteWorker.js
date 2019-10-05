@@ -24,6 +24,8 @@ async function start(myAddress, privateKey, eventSender) {
     if (iconWallet.getAddress() !== myAddress) {
         throw new ValidationError('ICX address mismatch!');
     }
+    let lastUpdate = await db.findAsync({ model: 'LastUpdate' });
+    eventSender.send('/logs', `lastUpdate: ${lastUpdate.length ? new Date(lastUpdate[0].time) : 'never'}`);
 
     while (true) {
         let lastUpdate = await db.findAsync({ model: 'LastUpdate' });
@@ -35,7 +37,7 @@ async function start(myAddress, privateKey, eventSender) {
         }
         else {
             lastUpdate = lastUpdate.pop().time;
-            if (Date.now() - lastUpdate < UPDATE_INTERVAL) {
+            if (Date.now() - lastUpdate > UPDATE_INTERVAL) {
                 shouldUpdate = true;
             }
         }
@@ -161,7 +163,9 @@ async function start(myAddress, privateKey, eventSender) {
             else {
                 eventSender.send('/logs', 'Skipped, invalid amount of votes');
             }
-            await db.updateAsync({ model: 'LastUpdate' }, { model: 'LastUpdate', time: Date.now() }, { upsert: true });
+            let newLastUpdate = Date.now();
+            let result = await db.updateAsync({ model: 'LastUpdate' }, { model: 'LastUpdate', time: newLastUpdate }, { upsert: true });
+            eventSender.send('/logs', `lastUpdate set to ${new Date(newLastUpdate)}, result ${result}.`);
         }
 
         await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
