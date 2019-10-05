@@ -38,6 +38,7 @@ class App extends Component {
 
     ipcRenderer.on('/logs', (event, logItem) => {
       let logs = this.state.logs;
+      console.log(logItem);
       logs.push(logItem);
       this.setState({ logs: logs });
     });

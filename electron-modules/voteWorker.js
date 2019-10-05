@@ -20,6 +20,7 @@ async function start(myAddress, privateKey, eventSender) {
     const httpProvider = new HttpProvider(API_URL);
     const iconService = new IconService(httpProvider);
     const iconWallet = IconWallet.loadPrivateKey(privateKey);
+    console.log('voter started')
     if (iconWallet.getAddress() !== myAddress) {
         throw new ValidationError('ICX address mismatch!');
     }
@@ -27,15 +28,19 @@ async function start(myAddress, privateKey, eventSender) {
     while (true) {
         let lastUpdate = await db.findAsync({ model: 'LastUpdate' });
         let shouldUpdate = false;
+
         if (!lastUpdate.length) {
             await db.insertAsync({ model: 'LastUpdate', time: Date.now() });
             shouldUpdate = true;
         }
         else {
-            if (lastUpdate < Date.now() - UPDATE_INTERVAL) {
+            lastUpdate = lastUpdate.pop().time;
+            if (Date.now() - lastUpdate < UPDATE_INTERVAL) {
                 shouldUpdate = true;
             }
         }
+        console.log('last update, should update', lastUpdate, shouldUpdate)
+
 
         if (shouldUpdate) {
             eventSender.send('/logs', `Should update`);
