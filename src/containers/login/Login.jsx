@@ -1,9 +1,9 @@
 import './Login.scss';
 import React, { Component } from 'react';
 import { IconWallet } from 'icon-sdk-js';
-import logo from "../../logo.svg";
 import { NotificationManager } from 'react-notifications';
 import { Loading } from '../loading/Loading';
+import Logo from '../../logo';
 const { ipcRenderer } = window.require('electron');
 
 export class Login extends Component {
@@ -104,7 +104,7 @@ export class Login extends Component {
 
             <div className="footer">
                 <div className="logo-container">
-                    <img src={logo} height="50px" alt="paradigm" />
+                    <Logo />
                     <p>Made by Paradigm</p>
                 </div>
             </div>

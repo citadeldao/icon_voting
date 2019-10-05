@@ -47,10 +47,13 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 360,
         height: 640,
+        minWidth: 360,
+        minHeight: 640,
+        autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,
             preload: __dirname + '/preload.js'
-        }
+        },
     });
 
     mainWindow.loadURL(

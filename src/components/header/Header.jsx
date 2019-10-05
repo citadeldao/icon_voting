@@ -34,7 +34,7 @@ export class Header extends Component {
                             },
                             {
                                 key: 'unlogin',
-                                name: 'Logount',
+                                name: 'Logout',
                                 action: () => {
                                     localStorage.removeItem('keystore');
                                     localStorage.removeItem('password');
