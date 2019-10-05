@@ -3,10 +3,13 @@ Icon auto-voting app
 
 ![screenshot](https://github.com/cybor97/icon_voting/blob/master/Selection_518.png)
 
+# Requirements
+1. NodeJS 10+
+2. Python 2.7.* for Windows
 
 # Build
 1. `git clone https://github.com/cybor97/icon_voting`
-2. `sudo npm i -g yarn`
+2. `sudo npm i -g yarn` (without sudo for windows)
 3. `yarn install`
 4. `npm rebuild`
 5. `yarn start` (to debug)
