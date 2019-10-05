@@ -1,0 +1,8 @@
+.checkbox-container > svg{
+    fill: #9E9E9E;
+    transition: fill linear 0.1s;
+}
+
+.checkbox-container.checked > svg{
+    fill: #0063F7;
+}

@@ -84,11 +84,11 @@ function init() {
                         address: address,
                         value: value
                     }, { upsert: true });
-                    return event.sender.send('/stake', [{ address: address, value: value }]);
+                    return event.sender.send('/stake', { [address]: value });
                 }
                 else {
                     await db.removeAsync({ model: 'Stake', address: address });
-                    return event.sender.send('/stake', [{ address: address, value: 0 }]);
+                    return event.sender.send('/stake', { [address]: value });
                 }
             }
             else {

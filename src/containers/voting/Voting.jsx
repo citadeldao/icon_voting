@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import { Loading } from '../loading/Loading';
 import { PrepsList } from './components/PrepsList';
+import { Checkbox } from '../../components/checkbox/Checkbox';
+import { NotificationManager } from 'react-notifications';
 
 const electron = window.require('electron');
 
@@ -19,7 +21,7 @@ export class Voting extends Component {
             favorites: {},
             stakes: {},
             tabIndex: 1,
-            // showPromo: !localStorage.getItem('promoAccepted')
+            // promoAccepted: !localStorage.getItem('promoAccepted')
         };
     }
 
@@ -40,8 +42,9 @@ export class Voting extends Component {
         });
 
         electron.ipcRenderer.send('/stake');
-        electron.ipcRenderer.on('/stake', (event, stakes) => {
-            this.setState({ stakes: stakes });
+        electron.ipcRenderer.on('/stake', (event, stake) => {
+            let stakes = this.state.stakes;
+            this.setState({ stakes: Object.assign(stakes, stake) });
         });
 
         electron.ipcRenderer.send('/favorites');
@@ -50,12 +53,23 @@ export class Voting extends Component {
         });
     }
 
+    componentWillUnmount() {
+        electron.ipcRenderer.removeAllListeners('/preps');
+        electron.ipcRenderer.removeAllListeners('/stake');
+        electron.ipcRenderer.removeAllListeners('/favorites');
+    }
+
     setFavorite(address, add) {
-        electron.ipcRenderer.send('/favorites', {
-            address: address,
-            alias: this.state.preps[address],
-            add: add
-        });
+        if (this.setFavoriteTimeout) {
+            clearTimeout(this.setFavoriteTimeout);
+        }
+        this.setFavoriteTimeout = setTimeout(() => {
+            electron.ipcRenderer.send('/favorites', {
+                address: address,
+                alias: this.state.preps[address],
+                add: add
+            });
+        }, 500);
     }
 
     setStake(address, value) {
@@ -66,16 +80,32 @@ export class Voting extends Component {
         this.setState({ logs: [] });
     }
 
-    promoClick() {
-        if (this.state.stakes && this.state.stakes[PARADIGM_CITADEL_ADDRESS] < 10) {
-            this.setStake(PARADIGM_CITADEL_ADDRESS, 10);
+    promoCheck(checked) {
+        if (checked) {
+            if (this.state.stakes && this.state.stakes[PARADIGM_CITADEL_ADDRESS] < 10) {
+                this.setStake(PARADIGM_CITADEL_ADDRESS, 10);
 
-            let stakes = this.state.stakes;
-            stakes[PARADIGM_CITADEL_ADDRESS] = 10;
-            this.setState({ showPromo: false, stakes: stakes });
-            localStorage.setItem('promoAccepted', true);
+                let stakes = this.state.stakes;
+                stakes[PARADIGM_CITADEL_ADDRESS] = 10;
+                this.setState({ promoAccepted: true, stakes: stakes });
+                localStorage.setItem('promoAccepted', true);
+            }
+            this.setFavorite(PARADIGM_CITADEL_ADDRESS, true);
         }
-        this.setFavorite(PARADIGM_CITADEL_ADDRESS, true);
+    }
+
+    runNow() {
+        electron.ipcRenderer.send('/voter/run');
+        electron.ipcRenderer.on('/voter/run', () => {
+            NotificationManager.success('Votes update started!');
+        })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevState, this.state)
+        if (this.state.preps[PARADIGM_CITADEL_ADDRESS] && !this.state.promoAccepted) {
+            return this.promoCheck(true);
+        }
     }
 
     render() {
@@ -112,11 +142,11 @@ export class Voting extends Component {
                 </Tabs>
             </div>
             <div className="promo-container">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18ZM10 15C12.7614 15 15 12.7614 15 10C15 7.23858 12.7614 5 10 5C7.23858 5 5 7.23858 5 10C5 12.7614 7.23858 15 10 15Z" fill="#9E9E9E" />
-                </svg>
+                <Checkbox
+                    checked={self.state.stakes[PARADIGM_CITADEL_ADDRESS] >= 10}
+                    onCheck={self.promoCheck.bind(self)} />
                 <span>Say thanks and vote 10% for Paradigm team</span>
-                <button onClick={self.promoClick.bind(self)}>RUN</button>
+                <button onClick={self.runNow.bind(self)}>RUN</button>
             </div>
         </div>
     }
