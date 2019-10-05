@@ -1,7 +1,8 @@
 # Icon Power Vote
 Icon auto-voting app
 
-![screenshot](https://github.com/cybor97/icon_voting/blob/master/Selection_518.png)
+![screenshot1](https://github.com/cybor97/icon_voting/blob/master/screens/1.png)
+![screenshot2](https://github.com/cybor97/icon_voting/blob/master/screens/2.png)
 
 
 # Build
