@@ -154,6 +154,10 @@ async function start(myAddress, privateKey, eventSender) {
                             .build(), iconWallet)
                     ).execute();
                     eventSender.send('/logs', `setDelegation result: ${setDelegationResult}`);
+
+                    let newLastUpdate = Date.now();
+                    let result = await db.updateAsync({ model: 'LastUpdate' }, { model: 'LastUpdate', time: newLastUpdate }, { upsert: true });
+                    eventSender.send('/logs', `lastUpdate set to ${new Date(newLastUpdate)}, result ${result}.`);
                 }
                 catch (err) {
                     console.error(err);
@@ -163,9 +167,6 @@ async function start(myAddress, privateKey, eventSender) {
             else {
                 eventSender.send('/logs', 'Skipped, invalid amount of votes');
             }
-            let newLastUpdate = Date.now();
-            let result = await db.updateAsync({ model: 'LastUpdate' }, { model: 'LastUpdate', time: newLastUpdate }, { upsert: true });
-            eventSender.send('/logs', `lastUpdate set to ${new Date(newLastUpdate)}, result ${result}.`);
         }
 
         await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));

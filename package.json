@@ -10,6 +10,8 @@
   "build": {
     "appId": "com.paradigm.icon_voting",
     "extends": null,
+    "productName": "Icon Power Vote",
+    "copyright": "Copyright © 2019 ${author}",
     "linux": {
       "category": "Utility"
     },
