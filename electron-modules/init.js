@@ -3,7 +3,8 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const AutoLaunch = require('auto-launch');
 
-const BrowserWindow = electron.BrowserWindow;
+const { BrowserWindow, Tray, Menu } = electron;
+let tray = null;
 
 async function init() {
     const app = electron.app;
@@ -19,16 +20,49 @@ async function init() {
         });
 
         if (shouldQuit) {
-            app.quit();
+            app.exit();
             return;
         }
     }
 
-    app.on("ready", createWindow);
-    app.on("window-all-closed", () => {
-        if (process.platform !== "darwin") {
-            app.quit();
-        }
+    app.on("ready", () => {
+        createWindow();
+        tray = new Tray(path.join(__dirname, '../public/icon_128.png'));
+        const contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Hide/Expand',
+                type: 'normal',
+                click: () => {
+                    if (mainWindow == null) {
+                        createWindow();
+                    }
+                    else if (mainWindow.isVisible()) {
+                        mainWindow.hide();
+                    }
+                    else {
+                        mainWindow.show();
+                    }
+                }
+            },
+            {
+                label: 'Exit',
+                type: 'normal',
+                click: () => app.exit()
+            }
+        ]);
+        tray.setToolTip('Icon Power Vote');
+        tray.setContextMenu(contextMenu);
+        tray.on('double-click', () => {
+            if (mainWindow == null) {
+                createWindow();
+            }
+            else if (mainWindow.isVisible()) {
+                mainWindow.hide();
+            }
+            else {
+                mainWindow.show();
+            }
+        })
     });
     app.on("activate", () => {
         if (mainWindow === null) {
@@ -64,7 +98,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             preload: __dirname + '/preload.js'
-        },
+        }
     });
 
     mainWindow.loadURL(
@@ -72,7 +106,11 @@ function createWindow() {
             ? "http://localhost:3000"
             : `file://${path.join(__dirname, "../build/index.html")}`
     );
-    mainWindow.on("closed", () => (mainWindow = null));
+    // mainWindow.on("closed", () => (mainWindow = null));
+    mainWindow.on('close', e => {
+        e.preventDefault();
+        mainWindow.hide();
+    });
 }
 
 module.exports = init;
