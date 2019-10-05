@@ -1,8 +1,8 @@
 # Icon Power Vote
-Icon auto-voting app
+Icon auto voting app by Paradigm Citadel. You can use this tool to automate your voting process.
 
-![screenshot1](https://github.com/cybor97/icon_voting/blob/master/screens/1.PNG)
-![screenshot2](https://github.com/cybor97/icon_voting/blob/master/screens/2.PNG)
+![screenshot1](https://github.com/paradigmcitadel/icon_voting/blob/master/screens/1.PNG)
+![screenshot2](https://github.com/paradigmcitadel/icon_voting/blob/master/screens/2.PNG)
 
 # Requirements
 1. NodeJS 10+
