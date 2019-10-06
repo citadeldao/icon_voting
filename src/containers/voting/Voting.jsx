@@ -51,12 +51,17 @@ export class Voting extends Component {
         electron.ipcRenderer.on('/favorites', (event, favorites) => {
             this.setState({ favorites: favorites });
         });
+
+        electron.ipcRenderer.on('/voter/run', () => {
+            NotificationManager.success('Votes update started!');
+        });
     }
 
     componentWillUnmount() {
         electron.ipcRenderer.removeAllListeners('/preps');
         electron.ipcRenderer.removeAllListeners('/stake');
         electron.ipcRenderer.removeAllListeners('/favorites');
+        electron.ipcRenderer.removeAllListeners('/voter/run');
     }
 
     setFavorite(address, add) {
@@ -96,9 +101,6 @@ export class Voting extends Component {
 
     runNow() {
         electron.ipcRenderer.send('/voter/run');
-        electron.ipcRenderer.on('/voter/run', () => {
-            NotificationManager.success('Votes update started!');
-        })
     }
 
     componentDidUpdate(prevProps, prevState) {

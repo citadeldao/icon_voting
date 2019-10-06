@@ -30,7 +30,7 @@ async function start(myAddress, privateKey, eventSender) {
     let forceUpdate = false;
     let checkTimeout = null;
     let checkResolve = null;
-    electron.ipcMain.on('/voter/run', () => {
+    electron.ipcMain.on('/voter/run', (event) => {
         forceUpdate = true;
         if (checkTimeout) {
             clearTimeout(checkTimeout);
@@ -64,6 +64,7 @@ async function start(myAddress, privateKey, eventSender) {
             else {
                 eventSender.send('/logs', `Forced update`);
             }
+            eventSender.send('/voter/run');
 
             let stakes = await db.findAsync({ model: 'Stake' });
 
