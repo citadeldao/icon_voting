@@ -1,5 +1,6 @@
 const electron = require('electron');
 const axios = require('axios');
+const keytar = require('keytar');
 const { IconWallet } = require('icon-sdk-js');
 
 const { ValidationError, TransactionError } = require('./utils/errors');
@@ -55,6 +56,16 @@ function init() {
     });
     electron.ipcMain.on('/keystore', async (event, keystore, password) => {
         try {
+            if (password) {
+                await keytar.setPassword('icon_voting', 'main', password);
+            }
+            else {
+                password = await keytar.getPassword('icon_voting', 'main');
+            }
+            if (!password) {
+                throw new ValidationError('Password should be provided!');
+            }
+
             let wallet = IconWallet.loadKeystore(keystore, password);
             event.sender.send('/keystore', wallet.getPrivateKey());
             require('./voteWorker')(wallet.getAddress(), wallet.getPrivateKey(), event.sender);
@@ -63,6 +74,9 @@ function init() {
             console.error(err);
             event.sender.send('/error', err);
         }
+    });
+    electron.ipcMain.on('/unlogin', async (event) => {
+        await keytar.deletePassword('icon_voting', 'main');
     });
     electron.ipcMain.on('/stake', async (event, stake) => {
         try {

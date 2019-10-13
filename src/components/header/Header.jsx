@@ -1,6 +1,7 @@
 import './Header.css';
 import React, { Component } from 'react';
 import Dropdown from '../dropdown/Dropdown';
+const electron = window.require('electron');
 
 export class Header extends Component {
     constructor(props) {
@@ -37,8 +38,8 @@ export class Header extends Component {
                                 name: 'Logout',
                                 action: () => {
                                     localStorage.removeItem('keystore');
-                                    localStorage.removeItem('password');
                                     localStorage.removeItem('address');
+                                    electron.ipcRenderer.send('/unlogin')
                                     window.location.reload();
                                 },
                             }

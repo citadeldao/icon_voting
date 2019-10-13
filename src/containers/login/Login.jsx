@@ -11,27 +11,28 @@ export class Login extends Component {
         super(props);
         this.state = {
             keystore: localStorage.getItem('keystore'),
-            password: localStorage.getItem('password'),
             wallet: localStorage.getItem('wallet'),
             loading: false
         }
     }
 
     componentDidMount() {
-        if (this.state.keystore && this.state.password) {
+        if (this.state.keystore) {
             this.login();
         }
     }
 
     login() {
         let self = this;
-        if (self.state && self.state.keystore && self.state.password) {
+        if (self.state && self.state.keystore) {
             self.setState({ loading: true });
             ipcRenderer.send('/keystore', self.state.keystore, self.state.password)
             ipcRenderer.once('/keystore', (event, privateKey) => {
                 self.setState({ wallet: IconWallet.loadPrivateKey(privateKey) }, () => {
+                    //Should remove password for previous version
+                    localStorage.removeItem('password');
+
                     localStorage.setItem('keystore', self.state.keystore);
-                    localStorage.setItem('password', self.state.password);
                     localStorage.setItem('address', self.state.wallet.getAddress());
                     NotificationManager.success(self.state.wallet.getAddress());
                     if (self.props.onLoginSuccess) {

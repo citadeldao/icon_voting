@@ -33,8 +33,8 @@ Voting process starts strictly once per day(starting next day) if app is running
 
 # Issues
 ## Error: Module did not self-register.
-Somehow electron-builder breaks scss in build cache.
-Just run `npm run rebuild`.
+Somehow electron-builder breaks dependencies.
+Just run `npm run rebuild && yarn electron-builder rebuild`.
 
 ## Contacts
 
