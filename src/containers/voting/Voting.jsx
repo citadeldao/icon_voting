@@ -54,6 +54,10 @@ export class Voting extends Component {
 
         electron.ipcRenderer.on('/voter/run', () => {
             NotificationManager.success('Votes update started!');
+            if (this.runTimeout) {
+                clearTimeout(this.runTimeout);
+            }
+            this.runTimeout = setTimeout(() => electron.ipcRenderer.send('/window/hide'), 1000);
         });
     }
 
@@ -104,7 +108,6 @@ export class Voting extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(prevState, this.state)
         if (this.state.preps[PARADIGM_CITADEL_ADDRESS] && !this.state.promoAccepted) {
             return this.promoCheck(true);
         }

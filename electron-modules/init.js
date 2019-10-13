@@ -112,6 +112,10 @@ function createWindow() {
         e.preventDefault();
         mainWindow.hide();
     });
+
+    electron.ipcMain.on('/window/hide', () => {
+        mainWindow.hide();
+    });
 }
 
 module.exports = init;
