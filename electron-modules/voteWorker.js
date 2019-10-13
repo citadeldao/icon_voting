@@ -179,8 +179,10 @@ async function start(myAddress, privateKey, eventSender) {
                     eventSender.send('/logs', `lastUpdate set to ${new Date(newLastUpdate)}, result ${result}.`);
                 }
                 catch (err) {
-                    console.error(err);
-                    eventSender.send('/error', err && err.message);
+                    console.error('voteWorker error', err);
+                    if (err) {
+                        eventSender.send('/error', typeof (err) == 'string' ? err : err.message);
+                    }
                 }
             }
             else {
