@@ -41,7 +41,7 @@ Just run `npm run rebuild && yarn electron-builder rebuild`.
 </br>
 <p align="left">
   <a href="http://orbs.paradigmcitadel.io">
-    <img src="https://icon.community/media/logos/paradigm.PNG" alt="Paradigm Citadel" width="150" height="150">
+    <img src="https://paradigmfund.io/wp-content/themes/pf/img/logo.svg" alt="Paradigm Citadel" width="150" height="150">
   </a>
   </br>
 
